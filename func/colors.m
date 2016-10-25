@@ -1,0 +1,19 @@
+collo.blue.europe     = [   0, 51,153];
+collo.red.switzerland = [232, 27,  0];
+collo.orange.dark_brewer = [255,127,  0];
+collo.orange.lite_brewer = [253,191,111];
+collo.blue.dark_brewer = [ 31, 12,180];
+collo.blue.lite_brewer = [166,206,227];
+%
+colhex.blue.darkBrewer = '#1F78B4';
+colhex.orange.darkBrewer = '#FF7F00';
+colhex.green.darkBrewer = '#33A02C';
+colhex.green.liteBrewer = '#B2DF8A';
+colhex.green.darkBrewer = '#006D2C';
+colhex.green.middBrewer = '#41AB5D';
+colhex.green.liteBrewer = '#C7E9C0';
+colhex.purple.darkBrewer = '#54278F';
+colhex.purple.middBrewer = '#807DBA';
+colhex.purple.liteBrewer = '#DADAEB';
+colhex.gray.liteBrewer = '#D9D9D9';
+colhex.gray.middBrewer = '#969696';
