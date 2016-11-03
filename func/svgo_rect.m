@@ -1,4 +1,5 @@
 function svgo_rect(x,y,fill,edge,width)
+% SVGO_RECT  Write SVG object: rectangle
 if nargin<5; width=1; end
 if nargin<4; edge='notprov'; end
 if nargin<3; fill='#000000'; end

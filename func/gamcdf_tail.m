@@ -1,33 +1,5 @@
 function [p,plo,pup] = gamcdf_tail(x,a,b,pcov,alpha)
-%GAMCDF Gamma cumulative distribution function.
-%   P = GAMCDF(X,A,B) returns the gamma cumulative distribution function
-%   with shape and scale parameters A and B, respectively, at the values in
-%   X.  The size of P is the common size of the input arguments.  A scalar
-%   input functions as a constant matrix of the same size as the other
-%   inputs.
-%
-%   Some references refer to the gamma distribution with a single
-%   parameter.  This corresponds to the default of B = 1. 
-%
-%   [P,PLO,PUP] = GAMCDF(X,A,B,PCOV,ALPHA) produces confidence bounds for
-%   P when the input parameters A and B are estimates.  PCOV is a 2-by-2
-%   matrix containing the covariance matrix of the estimated parameters.
-%   ALPHA has a default value of 0.05, and specifies 100*(1-ALPHA)%
-%   confidence bounds.  PLO and PUP are arrays of the same size as P
-%   containing the lower and upper confidence bounds.
-%
-%   See also GAMFIT, GAMINV, GAMLIKE, GAMPDF, GAMRND, GAMSTAT, GAMMAINC.
-
-%   GAMMAINC does computational work.
-
-%   References:
-%      [1] Abramowitz, M. and Stegun, I.A. (1964) Handbook of Mathematical
-%          Functions, Dover, New York, section 26.1.
-%      [2] Evans, M., Hastings, N., and Peacock, B. (1993) Statistical
-%          Distributions, 2nd ed., Wiley.
-
-%   Copyright 1993-2004 The MathWorks, Inc. 
-%   $Revision: 2.12.2.4 $  $Date: 2004/12/24 20:46:50 $
+%GAMCDF_TAIL Tail of gamma cumulative distribution function.
 
 if nargin < 2
     error('stats:gamcdf:TooFewInputs',...

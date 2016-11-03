@@ -1,4 +1,5 @@
 function ps = function_load_parameters(dirSource)
+% FUNCTION_LOAD_PARAMETERS Read parameter file
 ps.param.dirSource=dirSource;
 fn = fullfile(ps.param.dirSource,'parameters.in.tsv');
 numberFields = {'nShow','dsh','decorrLambda','snp','pSignificant','pSuggestive'};

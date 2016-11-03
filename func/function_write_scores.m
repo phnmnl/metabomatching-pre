@@ -1,4 +1,5 @@
 function function_write_scores(ps)
+% FUNCTION_WRITE_SCORES  Write metabomatching scores to file
 
 for i = 1:size(ps.score,2);
     fn=fullfile(ps.param.dirSource,[ps.tagPseudo{i},'.scores.tsv']);
@@ -15,7 +16,7 @@ for i = 1:size(ps.score,2);
     fclose(fi);
 end
 
-numberFields = {'nShow','dsh','decorrLambda','snp','pSignificant'};
+numberFields = {'nShow','dsh','decorrLambda','snp','pSignificant','pSuggestive'};
 fi=fopen(fullfile(ps.param.dirSource,'parameters.out.tsv'),'w');
 F=fieldnames(ps.param);
 for iField = 1:length(F)

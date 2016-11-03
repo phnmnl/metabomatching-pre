@@ -1,4 +1,5 @@
 function ps=function_import_pseudospectra(ps)
+% FUNCTION_IMPORT_PSEUDOSPECTRA Read pseudospectrum files
 if exist(ps.param.dirSource,'dir')
     fil=dir(fullfile(ps.param.dirSource,'*.pseudospectrum.tsv'));
     if length(fil)>0

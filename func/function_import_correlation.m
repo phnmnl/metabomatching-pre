@@ -1,4 +1,5 @@
 function ps = function_import_correlation(ps)
+% FUNCTION_IMPORT_CORRELATION  Import feature-feature correlation matrix
 
 if ps.param.decorrLambda<1
     try 

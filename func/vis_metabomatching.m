@@ -1,9 +1,29 @@
 function ps=vis_metabomatching(dirSource)
+% VIS_METABOMATCHING  Create SVG images for metabomatching results
 % dirSource=ps.param.dirSource;
-colors;  % colors that go together well, from colorbrewer
-unicode; % unicode keys for special characters
 ts.howto = false;
-%% ##### FILES #####
+%% ##### COLORS #####
+colhex.blue.darkBrewer   = '#1F78B4';
+colhex.orange.darkBrewer = '#FF7F00';
+colhex.green.darkBrewer  = '#33A02C';
+colhex.green.liteBrewer  = '#B2DF8A';
+colhex.green.darkBrewer  = '#006D2C';
+colhex.green.middBrewer  = '#41AB5D';
+colhex.green.liteBrewer  = '#C7E9C0';
+colhex.purple.darkBrewer = '#54278F';
+colhex.purple.middBrewer = '#807DBA';
+colhex.purple.liteBrewer = '#DADAEB';
+colhex.gray.liteBrewer   = '#D9D9D9';
+colhex.gray.middBrewer   = '#969696';
+%% ##### UNICODE KEYS #####
+unicodeRep={ ...
+    'alpha','&#945;';...
+    'beta','&#946;';...
+    'gamma','&#947;';...
+    'delta','&#948;';...
+    'epsilon','&#949;';...
+    'omega','&#969;'};...;
+%% ##### FILES ######
 fn_parameters  = fullfile(dirSource,'parameters.out.tsv');
 fn_metabolites = fullfile(dirSource,'metdb.mat');
 fn_description = fullfile(dirSource,'description.csv');
@@ -215,7 +235,7 @@ for jPseudo=1:length(ps.tagPseudo)
     %
     % ------+----------------------------------------------+      
     %       | COMPUTE RANKS AND DEFINE METABOLITES TO SHOW |      
-    %       +----------------------------------------------+------
+    %       +----------------------------------------------+---------------
     % ----- compute rank
     match.score(isnan(match.score))=0;
     [~,A] = sort(match.score,'descend');

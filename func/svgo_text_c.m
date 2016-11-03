@@ -1,4 +1,5 @@
 function svgo_text_c(x,y,txt,class,horiz)
+% SVGO_TEXT_C  Write SVG object: line, style by class
 if nargin<5
     horiz='middle';
 end

@@ -1,4 +1,5 @@
 function svgo_text(x,y,txt,horiz,fsize,fweight,fcolor,fstyle)
+% SVGO_TEXT  Write SVG object: text
 global fontsize file_id
 if nargin<8; fstyle='normal';  end
 if nargin<7; fcolor='black';   end

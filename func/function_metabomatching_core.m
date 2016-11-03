@@ -1,6 +1,5 @@
 function ps = function_metabomatching_core(ps)
-% NEEDS .id, .shift, .mim, .param, .cluster, .correlation
-% ADDS .score
+% FUNCTION_METABOMATCHING_CORE  Compute metabomatching scores
 nm = size(ps.sid,1);
 ns = size(ps.p,2);
 ps.score = NaN(nm,ns);

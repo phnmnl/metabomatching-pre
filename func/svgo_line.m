@@ -1,4 +1,5 @@
 function svgo_line(x,y,color,width)
+% SVGO_LINE  Write SVG object: line
 global file_id
 if nargin<4; width=1; end
 if nargin<3; color='#000000'; end
