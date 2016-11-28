@@ -65,9 +65,9 @@ if strcmp(ps.param.reference,'existing')
 else
     fil = dir(fullfile(dirSource,'zzz*casname'));
     if isempty(fil)
-        copyfile(fullfile(dirdata,'zzz*casname'),ps.param.dirSource);
+        copyfile(fullfile(datadir,'zzz*casname'),ps.param.dirSource);
     end
-    fil = dir(fullfile(dirdata,'*.casname'));
+    fil = dir(fullfile(datadir,'*.casname'));
 end
 if ~isempty(fil)
     for iFil = 1:length(fil)
