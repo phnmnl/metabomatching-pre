@@ -15,7 +15,12 @@ else
     
     fil = dir(fullfile(dirSource,[ps.param.reference,'*',type]));
     if isempty(fil)
-        copyfile(fullfile('data',[ps.param.reference,'*',type]),dirSource);
+		scriptdir=getenv("METABOMATCHING_SCRIPTDIR");
+		if ~isempty(scriptdir)
+			copyfile(fullfile(scriptdir, 'data',[ps.param.reference,'*',type]),dirSource);
+		else
+			copyfile(fullfile('data',[ps.param.reference,'*',type]),dirSource);
+		end
     end
     fil = dir(fullfile(dirSource,[ps.param.reference,'*',type]));
     
