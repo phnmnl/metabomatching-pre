@@ -1,5 +1,10 @@
 clear all
+funcdir=getenv("METABOMATCHING_SCRIPTDIR");
+if ~isempty(funcdir)
+addpath(fullfile(funcdir,'func'));
+else
 addpath('func');
+end
 dirs = dir;
 dirsSource = {dirs(:).name};
 dirsSource = dirsSource(strncmp(dirsSource,'ps.',3));
