@@ -1,1 +1,4 @@
 convert.sh
+test/image.svg
+test/scores.tsv
+working_dir

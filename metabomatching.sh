@@ -21,8 +21,11 @@ function print_help {
 	echo "metabomatching"
 	echo
 	echo "Options:"
-	echo "   -g, --debug            Debug mode."
-	echo "   -h, --help             Print this help message."
+	echo "   -g, --debug              Debug mode."
+	echo "   -h, --help               Print this help message."
+	echo "   -i, --input-file         Set input file."
+	echo "   -s, --output-score-file  Set output score file."
+	echo "   -S, --output-svg-file    Set output SVG file."
 }
 # Error {{{1
 # ==========
@@ -106,15 +109,19 @@ read_args "$@"
 # Set working directory
 if [ -n "$INPUT_FILE" ] ; then
 	DIRECTORY=working_dir
-	rm -r $DIRECTORY
-	mkdir $DIRECTORY
-	cp $INPUT_FILE $DIRECTORY/tag.pseudospectrum.tsv
+	rm -fr $DIRECTORY
+	mkdir -p $DIRECTORY/ps.study
+	cp $INPUT_FILE $DIRECTORY/ps.study/tag.pseudospectrum.tsv
 fi
-cd "$DIRECTORY"
 
+# Execute
+cd "$DIRECTORY"
 export METABOMATCHING_SCRIPTDIR=$PROG_DIR_NAME
 octave-cli $PROG_DIR_NAME/metabomatching.m
+cd -
 
 # Move output files
-mv $DIRECTORY/tag.scores.tsv $OUTPUT_SCORE_FILE
-mv $DIRECTORY/tag.svg $OUTPUT_SVG_FILE
+if [ -n "$INPUT_FILE" ] ; then
+	mv $DIRECTORY/ps.study/tag.scores.tsv $OUTPUT_SCORE_FILE
+	mv $DIRECTORY/ps.study/tag.svg $OUTPUT_SVG_FILE
+fi
