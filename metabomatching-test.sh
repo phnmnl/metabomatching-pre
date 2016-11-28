@@ -13,4 +13,12 @@ fi
 # MAIN {{{1
 # =========
 
-metabomatching.sh $PROG_DIR_NAME/test
+# Test with a directory
+metabomatching.sh "$PROG_DIR_NAME/test" || exit 1
+
+# Test with an input file
+scores_file=$PROG_DIR_NAME/test/scores.tsv
+svg_file=$PROG_DIR_NAME/test/image.svg
+metabomatching.sh -i "$PROG_DIR_NAME/test/ps.test/test.pseudospectrum.tsv" -s "$scores_file" -S "svg_file" || exit 1
+[ -f "$scores_file" ] || exit 1
+[ -f "$svg_file" ] || exit 1
