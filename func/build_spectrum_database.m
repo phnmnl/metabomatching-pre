@@ -3,6 +3,12 @@ function ps = build_spectrum_database(ps)
 type = ['slo',ps.param.mode(1)];
 mmdb = ps.param.reference;
 dirSource=ps.param.dirSource;
+scriptdir=getenv("METABOMATCHING_SCRIPTDIR");
+if ~isempty(scriptdir)
+	datadir=fullfile(scriptdir, 'data');
+else
+	datadir='data';
+end
 
 if strcmp(ps.param.reference,'existing')
 
@@ -15,12 +21,7 @@ else
     
     fil = dir(fullfile(dirSource,[ps.param.reference,'*',type]));
     if isempty(fil)
-		scriptdir=getenv("METABOMATCHING_SCRIPTDIR");
-		if ~isempty(scriptdir)
-			copyfile(fullfile(scriptdir, 'data',[ps.param.reference,'*',type]),dirSource);
-		else
-			copyfile(fullfile('data',[ps.param.reference,'*',type]),dirSource);
-		end
+		copyfile(fullfile(datadir, [ps.param.reference,'*',type]),dirSource);
     end
     fil = dir(fullfile(dirSource,[ps.param.reference,'*',type]));
     
@@ -64,9 +65,9 @@ if strcmp(ps.param.reference,'existing')
 else
     fil = dir(fullfile(dirSource,'zzz*casname'));
     if isempty(fil)
-        copyfile(fullfile('data','zzz*casname'),ps.param.dirSource);
+        copyfile(fullfile(dirdata,'zzz*casname'),ps.param.dirSource);
     end
-    fil = dir(fullfile('data','*.casname'));
+    fil = dir(fullfile(dirdata,'*.casname'));
 end
 if ~isempty(fil)
     for iFil = 1:length(fil)
