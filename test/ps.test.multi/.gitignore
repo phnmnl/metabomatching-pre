@@ -1,0 +1,6 @@
+*.svg
+test.scores.tsv
+zzz.casname
+hmdb.slop
+*.mat
+parameters.out.tsv

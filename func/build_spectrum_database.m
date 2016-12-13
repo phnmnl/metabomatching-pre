@@ -3,7 +3,7 @@ function ps = build_spectrum_database(ps)
 type = ['slo',ps.param.mode(1)];
 mmdb = ps.param.reference;
 dirSource=ps.param.dirSource;
-scriptdir=getenv("METABOMATCHING_SCRIPTDIR");
+scriptdir=getenv('METABOMATCHING_SCRIPTDIR');
 if ~isempty(scriptdir)
 	datadir=fullfile(scriptdir, 'data');
 else

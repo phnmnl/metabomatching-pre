@@ -1,21 +1,49 @@
 function function_write_scores(ps)
 % FUNCTION_WRITE_SCORES  Write metabomatching scores to file
 
-for i = 1:size(ps.score,2);
-    fn=fullfile(ps.param.dirSource,[ps.tagPseudo{i},'.scores.tsv']);
-    fi=fopen(fn,'w');
+if isfield(ps.param,'multi')
+    fn = fullfile(ps.param.dirSource,strrep(ps.param.multi,'pseudospectrum','scores'));
+    fi = fopen(fn,'w');
+    fprintf(fi,'cas\tid');
+    for i = 1:size(ps.score,2)
+        fprintf(fi,'\tscore/%s',ps.tag{i});
+    end
+    fprintf(fi,'\n');
     for j = 1:size(ps.sid,1)
         if ismember(ps.param.variant,{'pm2c','2c'})
-            fprintf(fi,'%s\t%d\t%s\t%d\t%.4f\n',...
+            fprintf(fi,'%s\t%d\t%s\t%d',...
                 ps.cas{j,1},ps.sid(j,1),...
-                ps.cas{j,2},ps.sid(j,2),ps.score(j,i));
+                ps.cas{j,2},ps.sid(j,2));
+            for i = 1:size(ps.score,2)
+                fprintf(fi,'\t%.4f',ps.score(j,i));
+            end
+            fprintf(fi,'\n');
         else
-            fprintf(fi,'%s\t%d\t%.4f\n',ps.cas{j},ps.sid(j),ps.score(j,i));
+            fprintf(fi,'%s\t%d',ps.cas{j},ps.sid(j));
+            for i = 1:size(ps.score,2)
+                fprintf(fi,'\t%.4f',ps.score(j,i));
+            end
+            fprintf(fi,'\n');
         end
     end
-    fclose(fi);
+else
+    for i = 1:size(ps.score,2);
+        
+        fn=fullfile(ps.param.dirSource,[ps.tag{i},'.scores.tsv']);
+        fi=fopen(fn,'w');
+        fprintf(fi,'cas\tid\tscore\n');
+        for j = 1:size(ps.sid,1)
+            if ismember(ps.param.variant,{'pm2c','2c'})
+                fprintf(fi,'%s\t%d\t%s\t%d\t%.4f\n',...
+                    ps.cas{j,1},ps.sid(j,1),...
+                    ps.cas{j,2},ps.sid(j,2),ps.score(j,i));
+            else
+                fprintf(fi,'%s\t%d\t%.4f\n',ps.cas{j},ps.sid(j),ps.score(j,i));
+            end
+        end
+        fclose(fi);
+    end
 end
-
 numberFields = {'nShow','dsh','decorrLambda','snp','pSignificant','pSuggestive'};
 fi=fopen(fullfile(ps.param.dirSource,'parameters.out.tsv'),'w');
 F=fieldnames(ps.param);

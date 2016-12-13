@@ -2,21 +2,21 @@
 # Constants
 # ==============
 
-PROG_NAME=$(basename $0)
-PROG_DIR_NAME=$(dirname $0)
-isabs=$(echo $PROG_DIR_NAME | grep ^/)
+NM_PROG=$(basename $0)
+DR_PROG=$(dirname $0)
+isabs=$(echo $DR_PROG | grep ^/)
 if [ -z "$isabs" ] ; then 
-	PROG_DIR_NAME="$PWD/$PROG_DIR_NAME"
+	DR_PROG="$PWD/$DR_PROG"
 fi
 YES=yes
 DEBUG=0
-DIRECTORY=
-INPUT_FILE=
-OUTPUT_SCORE_FILE=
-OUTPUT_SVG_FILE=
+DR_WORK=
+IF_PSS=
+OF_SCO=
+OF_PDF=
 
 function print_help {
-	echo "Usage: $PROG_NAME [options] directory"
+	echo "Usage: $NM_PROG [options] directory"
 	echo
 	echo "metabomatching"
 	echo
@@ -69,9 +69,9 @@ function read_args {
 		case $1 in
 			-g|--debug)               DEBUG=$((DEBUG + 1)) ;;
 			-h|--help)                print_help ; exit 0 ;;
-			-i|--input-file)          INPUT_FILE=$(get_opt_val $1 $2) ; shift_count=2 ;;
-			-s|--output-score-file)   OUTPUT_SCORE_FILE=$(get_opt_val $1 $2) ; shift_count=2 ;;
-			-S|--output-svg-file)     OUTPUT_SVG_FILE=$(get_opt_val $1 $2) ; shift_count=2 ;;
+			-i|--input-file)          IF_PSS=$(get_opt_val $1 $2) ; shift_count=2 ;;
+			-s|--output-file-scores)  OF_SCO=$(get_opt_val $1 $2) ; shift_count=2 ;;
+			-S|--output-file-pdf)     OF_PDF=$(get_opt_val $1 $2) ; shift_count=2 ;;
 			-) error "Illegal option $1." ;;
 			--) error "Illegal option $1." ;;
 			--*) error "Illegal option $1." ;;
@@ -84,21 +84,21 @@ function read_args {
 	shift $((OPTIND - 1))
 
 	# Read remaining arguments
-	if [ -z "$INPUT_FILE" ] ; then
+	if [ -z "$IF_PSS" ] ; then
 		[ $# -eq 1 ] || error "You must specify one, and only one, directory to process."
-		DIRECTORY="$1"
-		[ -d "$DIRECTORY" ] || error "This is not a directory, you fool"
+		DR_WORK="$1"
+		[ -d "$DR_WORK" ] || error "This is not a directory."
 	else
 		[ $# -eq 0 ] || error "You cannot specify a directory when using the -i option."
-		[ -f "$INPUT_FILE" ] || error "\"$INPUT_FILE\" is not a file."
-		[ -n "$OUTPUT_SCORE_FILE" ] || error "When using -i option, you must also set -s option."
-		[ -n "$OUTPUT_SVG_FILE" ] || error "When using -i option, you must also set -S option."
+		[ -f "$IF_PSS" ] || error "\"$IF_PSS\" is not a file."
+		[ -n "$OF_SCO" ] || error "When using -i option, you must also set -s option."
+		[ -n "$OF_PDF" ] || error "When using -i option, you must also set -S option."
 	fi
 	
 	# Debug
 	print_debug_msg 1 "Arguments are : $args"
-	print_debug_msg 1 "Directory to process is: $DIRECTORY"
-	print_debug_msg 1 "Input file to process is: $INPUT_FILE"
+	print_debug_msg 1 "Directory to process is: $DR_WORK"
+	print_debug_msg 1 "Input file to process is: $IF_PSS"
 }
 
 # MAIN {{{1
@@ -107,21 +107,26 @@ function read_args {
 read_args "$@"
 
 # Set working directory
-if [ -n "$INPUT_FILE" ] ; then
-	DIRECTORY=working_dir
-	rm -fr $DIRECTORY
-	mkdir -p $DIRECTORY/ps.study
-	cp $INPUT_FILE $DIRECTORY/ps.study/tag.pseudospectrum.tsv
+if [ -n "$IF_PSS" ] ; then
+	DR_WORK=working_dir
+	rm -fr $DR_WORK
+	mkdir -p $DR_WORK/ps.study
+	cp $IF_PSS $DR_WORK/ps.study/tag.pseudospectrum.tsv
 fi
 
 # Execute
-cd "$DIRECTORY"
-export METABOMATCHING_SCRIPTDIR=$PROG_DIR_NAME
-octave-cli $PROG_DIR_NAME/metabomatching.m
+cd "$DR_WORK"
+export METABOMATCHING_SCRIPTDIR=$DR_PROG
+octave-cli $DR_PROG/metabomatching.m
+find -name "*.svg" -type f | while read file; do inkscape "${file}" --export-pdf="${file%.svg}.pdf"; done
+
+if [ -n "$IF_PSS" ] ; then
+	pdftk ps.study/*.pdf cat output ps.study/all.pdf
+fi
 cd -
 
 # Move output files
-if [ -n "$INPUT_FILE" ] ; then
-	mv $DIRECTORY/ps.study/tag.scores.tsv $OUTPUT_SCORE_FILE
-	mv $DIRECTORY/ps.study/tag.svg $OUTPUT_SVG_FILE
+if [ -n "$IF_PSS" ] ; then
+	mv $DR_WORK/ps.study/tag.scores.tsv $OF_SCO
+	mv $DR_WORK/ps.study/all.pdf $OF_PDF
 fi
