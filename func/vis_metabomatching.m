@@ -1,6 +1,6 @@
 function ps=vis_metabomatching(dirSource)
 % VIS_METABOMATCHING  Create SVG images for metabomatching results
-% dirSource=ps.param.dirSource;
+%dirSource=ps.param.dirSource;
 ts.howto = false;
 %% ##### COLORS #####
 colhex.blue.darkBrewer   = '#1F78B4';
@@ -28,8 +28,6 @@ fn_parameters  = fullfile(dirSource,'parameters.out.tsv');
 fn_metabolites = fullfile(dirSource,'metdb.mat');
 fn_description = fullfile(dirSource,'description.csv');
 fn_control     = fullfile(dirSource,'cascontrol.csv');
-fn_convert     = fullfile('convert.sh');
-if exist(fn_convert,'file'); delete(fn_convert); end
 %% ##### GET PARAMETERS #####
 numberFields = {'nShow','dsh','decorrLambda','snp','pSignificant','p_pm','pSuggestive','wide'};
 fi = fopen(fn_parameters);
@@ -72,10 +70,10 @@ metdb.casnum=cas2num(metdb.cas);
 %% ##### GET PSEUDOSPECTRUM #####
 ps=function_import_pseudospectra(ps);
 %% ##### SET DEEP PARAMETERS #####
-ps.param.deep.tag=strrep(strrep(ps.tagPseudo,'.','_'),'-','_');
+ps.param.deep.tag=strrep(strrep(ps.tag,'.','_'),'-','_');
 pdeepdef={'ftt',true;'psa','left'};
 for j = 1:size(pdeepdef,1)
-    for i = 1:length(ps.tagPseudo)
+    for i = 1:length(ps.tag)
         if ~ismember([pdeepdef{j,1},'_',ps.param.deep.tag{i}],fieldnames(ps.param));
             ps.param.deep.([pdeepdef{j,1},'_',ps.param.deep.tag{i}])=pdeepdef{j,2};
         else
@@ -96,8 +94,8 @@ if exist(fn_description,'file')
         fi = fopen(fn_description);
         pr = textscan(fi,'%s%s%s','delimiter',';');
         fclose(fi);
-        for i = 1:length(ps.tagPseudo)
-            ix = find(strcmp(ps.tagPseudo{i},pr{1}));
+        for i = 1:length(ps.tag)
+            ix = find(strcmp(ps.tag{i},pr{1}));
             if isempty(ix)
                 ps.description{i,1}='';
             else
@@ -109,8 +107,8 @@ if exist(fn_description,'file')
         fi = fopen(fn_description);
         pr = textscan(fi,'%s%s','delimiter',';');
         fclose(fi);
-        for i = 1:length(ps.tagPseudo)
-            ix = find(strcmp(ps.tagPseudo{i},pr{1}));
+        for i = 1:length(ps.tag)
+            ix = find(strcmp(ps.tag{i},pr{1}));
             if isempty(ix)
                 ps.description{i,1}='';
             else
@@ -119,12 +117,12 @@ if exist(fn_description,'file')
         end
     end
 else
-    for i = 1:length(ps.tagPseudo)
+    for i = 1:length(ps.tag)
         ps.description{i,1}='';
     end
 end
 %% ##### GET CONTROL METABOLITES
-for i = 1:length(ps.tagPseudo)
+for i = 1:length(ps.tag)
     ps.cas_control{i}={};
     ps.cas_control_num{i}=[];
 end
@@ -133,7 +131,7 @@ if exist(fn_control,'file');
     pr = textscan(fi,'%s%s','delimiter',';');
     fclose(fi);
     for i = 1:length(pr{1})
-        ixs=find(strcmp(pr{1}{i},ps.tagPseudo));
+        ixs=find(strcmp(pr{1}{i},ps.tag));
         if ~isempty(ixs)
             cas=pr{2}{i};
             casnum=cas2num(cas);
@@ -144,10 +142,31 @@ if exist(fn_control,'file');
 end
 %% ##### GET SCORES #####
 clear matches;
-for i = 1:length(ps.tagPseudo)
-    fi = fopen(fullfile(dirSource,[ps.tagPseudo{i},'.scores.tsv']));
+if isfield(ps.param,'multi')
+    fi = fopen(fullfile(dirSource,strrep(ps.param.multi,'pseudospectrum','scores')));
     if ts.is2c
-        pr = textscan(fi,'%s%f%s%f%f','delimiter','\t');
+    else
+        lb = textscan(fi,['%s%s',repmat('%s',1,length(ps.tag))],1,'delimiter','\t');
+        pr = textscan(fi,['%s%f',repmat('%f',1,length(ps.tag))],'delimiter','\t');
+        matches.cas(:,1)=pr{1};
+        matches.sid(:,1)=pr{2};
+        [a,b] = ismember(matches.sid,metdb.sid);
+        matches.name = metdb.name(b(a));
+        matches.casnum = metdb.casnum(b(a));
+        for i = 1:length(ps.tag)
+            xx = regexp(lb{2+i},'/','split');
+            tag = xx{1}{2};
+            ix = find(strcmpi(ps.tag,tag));
+            matches.score(:,ix)=pr{2+i};
+        end
+        nVar=1;
+    end
+    fclose(fi);
+else
+for i = 1:length(ps.tag)
+    fi = fopen(fullfile(dirSource,[ps.tag{i},'.scores.tsv']));
+    if ts.is2c
+        pr = textscan(fi,'%s%f%s%f%f','delimiter','\t','headerlines',1);
         fclose(fi);
         if i == 1
             matches.cas(:,1)=pr{1};
@@ -164,7 +183,7 @@ for i = 1:length(ps.tagPseudo)
         matches.score(:,i)=pr{5};
         nVar=2;
     else
-        pr = textscan(fi,'%s%f%f','delimiter','\t');
+        pr = textscan(fi,'%s%f%f','delimiter','\t','headerlines',1);
         fclose(fi);
         if i == 1
             matches.cas=pr{1};
@@ -176,6 +195,7 @@ for i = 1:length(ps.tagPseudo)
         matches.score(:,i)=pr{3};
         nVar=1;
     end
+end
 end
 %% ##### FORMAT PARAMETERS FOR SETTINGS BOX #####
 %
@@ -214,11 +234,11 @@ elseif ps.param.decorrLambda < 1.0
     pd.fg_set = [pd.fg_set;{'decorr',['&#x03BB; = ',num2str(ps.param.decorrLambda,'%.2f')]}];
 end
 %% ##### ##### LOOPING OVER PSEUDOS ##### #####
-for jPseudo=1:length(ps.tagPseudo)
+for jPseudo=1:length(ps.tag)
     param=ps.param;
     param.description = ps.description{jPseudo};
     param.cas_ctrl = ps.cas_control{jPseudo};
-    param.tag = ps.tagPseudo{jPseudo};
+    param.tag = ps.tag{jPseudo};
     pseudo.x = ps.shift;
     pseudo.beta = ps.beta(:,jPseudo);
     pseudo.c = 1+(pseudo.beta<0);
@@ -987,12 +1007,4 @@ for jPseudo=1:length(ps.tagPseudo)
         fp('</svg>');
         fclose(file_id);
     end
-    fn = fullfile(param.dirSource,[param.tag,'.svg']);
-    ext = {'pdf','png'};
-    fi = fopen(fn_convert,'a');
-    for i = 1:2
-        cm = ['inkscape ',fn,' --export-',ext{i},'=',strrep(fn,'svg',ext{i})];
-        fprintf(fi,[cm,'\n']);
-    end
-    fclose(fi);
 end

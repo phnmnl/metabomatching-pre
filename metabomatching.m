@@ -1,5 +1,5 @@
 clear all
-funcdir=getenv("METABOMATCHING_SCRIPTDIR");
+funcdir=getenv('METABOMATCHING_SCRIPTDIR');
 if ~isempty(funcdir)
 addpath(fullfile(funcdir,'func'));
 else
