@@ -1,6 +1,6 @@
-function ps = function_load_parameters(dirSource)
+function ps = function_load_parameters(dir_source)
 % FUNCTION_LOAD_PARAMETERS Read parameter file
-ps.param.dirSource=dirSource;
+ps.param.dirSource=dir_source;
 fn = fullfile(ps.param.dirSource,'parameters.in.tsv');
 numberFields = {'nShow','dsh','decorrLambda','snp','pSignificant','pSuggestive'};
 if exist(fn,'file');
@@ -46,6 +46,7 @@ end
 if ~isfield(ps.param,'pSignificant');
     ps.param.pSignificant=5e-8;
 end
-if ismember(ps.param.variant,{'pm','pm1c','pm2c'}) && ~isfield(ps.param,'pSuggestive')
+if ismember(ps.param.variant,{'pm','pm1c','pm2c'}) && ...
+        ~isfield(ps.param,'pSuggestive')
     ps.param.pSuggestive=1e-4;
 end

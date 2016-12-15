@@ -14,7 +14,7 @@ RUN apt-get install -y \
 # Clean up
 RUN apt-get -y clean && apt-get -y autoremove && rm -rf /var/lib/{cache,log}/ /tmp/* /var/tmp/*
 
-ENV TOOL_VERSION=0.1.5
+ENV TOOL_VERSION=0.1.6
 ENV CONTAINER_VERSION=0.2
 
 # Install metabomatching

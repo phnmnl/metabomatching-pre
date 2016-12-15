@@ -116,7 +116,7 @@ fi
 
 # Execute
 cd "$DR_WORK"
-export METABOMATCHING_SCRIPTDIR=$DR_PROG
+export DR_METABOMATCHING=$DR_PROG
 octave-cli $DR_PROG/metabomatching.m
 find -name "*.svg" -type f | while read file; do inkscape "${file}" --export-pdf="${file%.svg}.pdf"; done
 

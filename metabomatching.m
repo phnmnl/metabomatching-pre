@@ -1,4 +1,4 @@
-clear all
+clear all;
 funcdir=getenv('METABOMATCHING_SCRIPTDIR');
 if ~isempty(funcdir)
 addpath(fullfile(funcdir,'func'));
@@ -6,14 +6,14 @@ else
 addpath('func');
 end
 dirs = dir;
-dirsSource = {dirs(:).name};
-dirsSource = dirsSource(strncmp(dirsSource,'ps.',3));
-for i = 1:length(dirsSource)
+dirs_source = {dirs(:).name};
+dirs_source = dirs_source(strncmp(dirs_source,'ps.',3));
+for i = 1:length(dirs_source)
     clear ps;
-    dirSource = dirsSource{i};
+    dir_source = dirs_source{i};
     fprintf('+---------------------------------------\n')
-    fprintf('|   %s\n+--\n',dirSource);
-    ps=function_load_parameters(dirSource);
+    fprintf('|   %s\n+--\n',dir_source);
+    ps=function_load_parameters(dir_source);
     fprintf('--- loading data ------------------');
     ps=build_spectrum_database(ps);
     ps=function_import_correlation(ps);
@@ -24,9 +24,9 @@ for i = 1:length(dirsSource)
     fprintf(' done\n--- metabomatching ----------------');
     fprintf(' done\n--- writing scores ----------------');
     function_write_scores(ps);
-    save(fullfile(dirSource,'ps.mat'),'ps');
+    save(fullfile(dir_source,'ps.mat'),'ps');
     fprintf(' done\n--- writing svg -------------------');    
-    vis_metabomatching(dirSource);
+    vis_metabomatching(dir_source);
     fprintf(' done\n----------------------------------- ---+');
     fprintf('\n\n');
 end
