@@ -9,13 +9,14 @@ RUN apt-get update
 RUN apt-get install -y \
 	octave \
 	inkscape \
+	pdftk \
 	git
 
 # Clean up
 RUN apt-get -y clean && apt-get -y autoremove && rm -rf /var/lib/{cache,log}/ /tmp/* /var/tmp/*
 
 ENV TOOL_VERSION=0.1.6
-ENV CONTAINER_VERSION=0.2
+ENV CONTAINER_VERSION=0.2.1
 
 # Install metabomatching
 RUN git clone -b release/${TOOL_VERSION} https://github.com/phnmnl/metabomatching-pre.git /mm-tp/
