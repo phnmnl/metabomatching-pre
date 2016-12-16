@@ -16,7 +16,7 @@ RUN apt-get install -y \
 RUN apt-get -y clean && apt-get -y autoremove && rm -rf /var/lib/{cache,log}/ /tmp/* /var/tmp/*
 
 ENV TOOL_VERSION=0.1.8
-ENV CONTAINER_VERSION=0.2.1
+ENV CONTAINER_VERSION=0.2.1.1
 
 # Install metabomatching
 RUN git clone -b release/${TOOL_VERSION} https://github.com/phnmnl/metabomatching-pre.git /mm-tp/
