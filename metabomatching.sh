@@ -12,6 +12,7 @@ YES=yes
 DEBUG=0
 DR_WORK=
 IF_PSS=
+IF_PAR=
 OF_SCO=
 OF_PDF=
 
@@ -67,11 +68,12 @@ function read_args {
 	while true ; do
 		shift_count=1
 		case $1 in
-			-g|--debug)               DEBUG=$((DEBUG + 1)) ;;
-			-h|--help)                print_help ; exit 0 ;;
-			-i|--input-file)          IF_PSS=$(get_opt_val $1 $2) ; shift_count=2 ;;
-			-s|--output-file-scores)  OF_SCO=$(get_opt_val $1 $2) ; shift_count=2 ;;
-			-S|--output-file-pdf)     OF_PDF=$(get_opt_val $1 $2) ; shift_count=2 ;;
+			-g|--debug)                  DEBUG=$((DEBUG + 1)) ;;
+			-h|--help)                   print_help ; exit 0 ;;
+			-i|--input-file)             IF_PSS=$(get_opt_val $1 $2) ; shift_count=2 ;;
+			-p|--input-file-parameters)  IF_PAR=$(get_opt_val $1 $2) ; shift_count=2 ;;
+			-s|--output-file-scores)     OF_SCO=$(get_opt_val $1 $2) ; shift_count=2 ;;
+			-S|--output-file-pdf)        OF_PDF=$(get_opt_val $1 $2) ; shift_count=2 ;;
 			-) error "Illegal option $1." ;;
 			--) error "Illegal option $1." ;;
 			--*) error "Illegal option $1." ;;
@@ -113,7 +115,9 @@ if [ -n "$IF_PSS" ] ; then
 	mkdir -p $DR_WORK/ps.study
 	cp $IF_PSS $DR_WORK/ps.study/tag.pseudospectrum.tsv
 fi
-
+if [ -n "$IF_PAR" ] ; then
+	cp $IF_PAR $DR_WORK/ps.study/parameters.in.tsv
+fi
 # Execute
 cd "$DR_WORK"
 export DR_METABOMATCHING=$DR_PROG
