@@ -17,8 +17,8 @@ fi
 metabomatching.sh -g "$PROG_DIR_NAME/test" || exit 1
 
 # Test with an input file
-scores_file=$PROG_DIR_NAME/test/scores.tsv
-svg_file=$PROG_DIR_NAME/test/image.svg
-metabomatching.sh -g -i "$PROG_DIR_NAME/test/ps.test/test.pseudospectrum.tsv" -s "$scores_file" -S "$svg_file" || exit 1
+scores_file=$PROG_DIR_NAME/test/sco.tsv
+svg_file=$PROG_DIR_NAME/test/sco.pdf
+metabomatching.sh -g -i "$PROG_DIR_NAME/test/ps.test.multi/test.pseudospectrum.tsv" -s "$scores_file" -S "$pdf_file" || exit 1
 [ -f "$scores_file" ] || exit 1
 [ -f "$svg_file" ] || exit 1
