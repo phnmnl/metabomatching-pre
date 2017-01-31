@@ -110,7 +110,7 @@ read_args "$@"
 
 # Set working directory
 if [ -n "$IF_PSS" ] ; then
-	DR_WORK=working_dir
+	DR_WORK=wd
 	rm -fr $DR_WORK
 	mkdir -p $DR_WORK/ps.study
 	cp $IF_PSS $DR_WORK/ps.study/tag.pseudospectrum.tsv
