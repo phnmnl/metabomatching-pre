@@ -2,5 +2,9 @@
 test.scores.tsv
 zzz.casname
 hmdb.slop
+umdb.slop
+x.tsv
+y.tsv
 *.mat
 parameters.out.tsv
+*.pdf

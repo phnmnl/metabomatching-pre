@@ -1,6 +1,8 @@
 *.svg
 test.scores.tsv
 zzz.casname
-hmdb.slop
+*.slop
 *.mat
+*.pdf
 parameters.out.tsv
+_*
