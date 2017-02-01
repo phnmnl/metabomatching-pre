@@ -14,6 +14,8 @@ if exist(fn,'file');
             ps.param.(pr{1}{j})=pr{2}{j};
         end
     end
+else
+    fprintf('|   no parameter file, using defaults\n+--\n');
 end
 %
 %

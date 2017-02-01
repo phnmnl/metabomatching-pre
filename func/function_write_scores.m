@@ -26,6 +26,7 @@ if isfield(ps.param,'multi')
             fprintf(fi,'\n');
         end
     end
+    fclose(fi);
 else
     for i = 1:size(ps.score,2);
         

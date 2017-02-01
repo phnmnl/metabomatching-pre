@@ -1,0 +1,8 @@
+reference	smdb
+mode	peak
+variant	1c
+dsh	0.0200
+scoring	chisq
+decorrLambda	1.0000
+nShow	8
+pSignificant	1E-6
