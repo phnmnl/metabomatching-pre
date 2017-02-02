@@ -2,7 +2,7 @@ function function_write_scores(ps)
 % FUNCTION_WRITE_SCORES  Write metabomatching scores to file
 
 if isfield(ps.param,'multi')
-    fn = fullfile(ps.param.dirSource,strrep(ps.param.multi,'pseudospectrum','scores'));
+    fn = fullfile(ps.param.dir_source,strrep(ps.param.multi,'pseudospectrum','scores'));
     fi = fopen(fn,'w');
     fprintf(fi,'cas\tid');
     for i = 1:size(ps.score,2)
@@ -30,7 +30,7 @@ if isfield(ps.param,'multi')
 else
     for i = 1:size(ps.score,2);
         
-        fn=fullfile(ps.param.dirSource,[ps.tag{i},'.scores.tsv']);
+        fn=fullfile(ps.param.dir_source,[ps.tag{i},'.scores.tsv']);
         fi=fopen(fn,'w');
         fprintf(fi,'cas\tid\tscore\n');
         for j = 1:size(ps.sid,1)
@@ -45,8 +45,8 @@ else
         fclose(fi);
     end
 end
-numberFields = {'nShow','dsh','decorrLambda','snp','pSignificant','pSuggestive'};
-fi=fopen(fullfile(ps.param.dirSource,'parameters.out.tsv'),'w');
+numberFields = {'n_show','dsh','decorr_lambda','snp','p_significant','pSuggestive'};
+fi=fopen(fullfile(ps.param.dir_source,'parameters.out.tsv'),'w');
 F=fieldnames(ps.param);
 for iField = 1:length(F)
     f=F{iField};

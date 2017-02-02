@@ -2,7 +2,7 @@ function ps = build_spectrum_database(ps)
 % BUILD_SPECTRUM_DATABASE  Read spectrum database file(s)
 type = ['slo',ps.param.mode(1)];
 mmdb = ps.param.reference;
-dirSource=ps.param.dirSource;
+dir_source=ps.param.dir_source;
 scriptdir=getenv('DR_METABOMATCHING');
 if ~isempty(scriptdir)
 	datadir=fullfile(scriptdir, 'data');
@@ -12,24 +12,24 @@ end
 
 if strcmp(ps.param.reference,'existing')
 
-    fil = dir(fullfile(dirSource,['*.',type]));
+    fil = dir(fullfile(dir_source,['*.',type]));
     if isempty(fil)
         tst.failed = true;
     end
     
 else
     
-    fil = dir(fullfile(dirSource,[ps.param.reference,'*',type]));
+    fil = dir(fullfile(dir_source,[ps.param.reference,'*',type]));
     if isempty(fil)
-		copyfile(fullfile(datadir, [ps.param.reference,'*',type]),dirSource);
+		copyfile(fullfile(datadir,[ps.param.reference,'*',type]),dir_source);
     end
-    fil = dir(fullfile(dirSource,[ps.param.reference,'*',type]));
+    fil = dir(fullfile(dir_source,[ps.param.reference,'*',type]));
     
 end
 
 if strcmp(type,'slop')
     for iFil = 1:length(fil);
-        fi = fopen(fullfile(dirSource,fil(iFil).name));
+        fi = fopen(fullfile(dir_source,fil(iFil).name));
         pr = textscan(fi,'%s%f%f%f','delimiter','\t');
         [~,reo] = unique(pr{4});
         metdb.cas = pr{1}(reo);
@@ -43,7 +43,7 @@ if strcmp(type,'slop')
     
 elseif strcmp(type,'slom')
     for iFil = 1:length(fil)
-        fi = fopen(fullfile(dirSource,fil(iFil).name));
+        fi = fopen(fullfile(dir_source,fil(iFil).name));
         pr = textscan(fi,'%s%f%f%f%f','delimiter','\t');
         [~,reo] = unique(pr{5});
         metdb.cas = pr{1}(reo);
@@ -61,17 +61,17 @@ for i = 1:length(metdb.cas)
     metdb.name{i,1}='unnamed';
 end
 if strcmp(ps.param.reference,'existing')
-    fil = dir(fullfile(dirSource,'*.casname'));
+    fil = dir(fullfile(dir_source,'*.casname'));
 else
-    fil = dir(fullfile(dirSource,'zzz*casname'));
+    fil = dir(fullfile(dir_source,'zzz*casname'));
     if isempty(fil)
-        copyfile(fullfile(datadir,'zzz*casname'),ps.param.dirSource);
+        copyfile(fullfile(datadir,'zzz*casname'),ps.param.dir_source);
     end
     fil = dir(fullfile(datadir,'*.casname'));
 end
 if ~isempty(fil)
     for iFil = 1:length(fil)
-        fi=fopen(fullfile(dirSource,fil(iFil).name));
+        fi=fopen(fullfile(dir_source,fil(iFil).name));
         pr=textscan(fi,'%s%s','delimiter','\t');
         fclose(fi);
         se = find(strcmp(metdb.name,'unnamed'));
@@ -79,4 +79,4 @@ if ~isempty(fil)
         metdb.name(se(ism))=pr{2}(loc(ism));
     end
 end
-save(fullfile(dirSource,'metdb.mat'),'metdb');
+save(fullfile(dir_source,'metdb.mat'),'metdb');

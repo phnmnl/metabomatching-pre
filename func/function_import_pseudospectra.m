@@ -1,7 +1,7 @@
 function ps=function_import_pseudospectra(ps)
 % FUNCTION_IMPORT_PSEUDOSPECTRA Read pseudospectrum files
-if exist(ps.param.dirSource,'dir')
-    fil=dir(fullfile(ps.param.dirSource,'*.pseudospectrum.tsv'));
+if exist(ps.param.dir_source,'dir')
+    fil=dir(fullfile(ps.param.dir_source,'*.pseudospectrum.tsv'));
     if length(fil)>0
         for f={'beta','se','p','tag'}
             if isfield(ps,f{1});
@@ -9,12 +9,12 @@ if exist(ps.param.dirSource,'dir')
             end
         end
         for i = 1:length(fil)
-            fi = fopen(fullfile(ps.param.dirSource,fil(i).name));
+            fi = fopen(fullfile(ps.param.dir_source,fil(i).name));
             qq = textscan(fi,'%s',1,'delimiter','?');
             qq = qq{1}{1};
             fclose(fi);
             nc = length(regexp(qq,'\s','split'));
-            fi = fopen(fullfile(ps.param.dirSource,fil(i).name));
+            fi = fopen(fullfile(ps.param.dir_source,fil(i).name));
             lb = textscan(fi,repmat('%s',1,nc),1,'delimiter','\t');
             pr = textscan(fi,repmat('%f',1,nc),'delimiter','\t');
             fclose(fi);
@@ -50,7 +50,7 @@ if exist(ps.param.dirSource,'dir')
             end
         end
         ps.shift = ps.shift(:,1);
-        %ps.param.dirSource = dirSource;
+        %ps.param.dir_source = dir_source;
         %
         if ismember(ps.param.variant,{'pm','pm1c','pm2c'})
             F=fieldnames(ps);
@@ -83,5 +83,5 @@ if exist(ps.param.dirSource,'dir')
         error('metabomatching:noPS','No pseudospectrum files found (*.pseudospectrum.tsv)');
     end
 else
-    error('metabomatching:noDS','Source directory %s does not exist',ps.param.dirSource);
+    error('metabomatching:noDS','Source directory %s does not exist',ps.param.dir_source);
 end

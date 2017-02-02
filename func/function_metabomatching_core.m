@@ -4,7 +4,7 @@ nm = size(ps.sid,1);
 ns = size(ps.p,2);
 ps.score = NaN(nm,ns);
 for jm = 1:nm
-    if ps.param.decorrLambda<1
+    if ps.param.decorr_lambda<1
         seInMet=[];
         for ii = 1:size(ps.cluster{jm},1)
             seInCluster = find(...
@@ -16,7 +16,7 @@ for jm = 1:nm
         nInMet = length(seInMet);
         D = blkdiag(subC{:});
         clear subC
-        C = (1-ps.param.decorrLambda)*D+ps.param.decorrLambda*eye(nInMet);
+        C = (1-ps.param.decorr_lambda)*D+ps.param.decorr_lambda*eye(nInMet);
         z = ps.beta(seInMet,:)./ps.se(seInMet,:);
         switch ps.param.scoring
             case 'chisq'
