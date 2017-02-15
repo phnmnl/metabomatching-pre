@@ -26,8 +26,8 @@ unicodeRep={ ...
 %% ##### FILES ######
 fn_parameters  = fullfile(dir_source,'parameters.out.tsv');
 fn_metabolites = fullfile(dir_source,'metdb.mat');
-fn_description = fullfile(dir_source,'description.csv');
-fn_control     = fullfile(dir_source,'cascontrol.csv');
+fn_description = fullfile(dir_source,'description.tsv');
+fn_control     = fullfile(dir_source,'cascontrol.tsv');
 %% ##### GET PARAMETERS #####
 numberFields = {'n_show','dsh','decorr_lambda','snp','p_significant','p_pm','pSuggestive','wide'};
 fi = fopen(fn_parameters);
@@ -88,7 +88,7 @@ if exist(fn_description,'file')
     fi = fopen(fn_description);
     pr = textscan(fi,'%s',1,'delimiter','?');
     fclose(fi);
-    xx = regexp(pr{1},';','split');
+    xx = regexp(pr{1},'\t','split');
     nc = length(xx{1});    
     if nc == 3
         fi = fopen(fn_description);
@@ -97,7 +97,7 @@ if exist(fn_description,'file')
         for i = 1:length(ps.tag)
             ix = find(strcmp(ps.tag{i},pr{1}));
             if isempty(ix)
-                ps.description{i,1}='';
+                ps.description{i,1}=['(',ps.tag{i},')'];
             else
                 ps.description{i,1}=...
                     ['of ',pr{2}{ix},' in <tspan font-style="italic">',pr{3}{ix},'</tspan>'];
@@ -105,7 +105,7 @@ if exist(fn_description,'file')
         end
     else
         fi = fopen(fn_description);
-        pr = textscan(fi,'%s%s','delimiter',';');
+        pr = textscan(fi,'%s%s','delimiter','\t');
         fclose(fi);
         for i = 1:length(ps.tag)
             ix = find(strcmp(ps.tag{i},pr{1}));
@@ -118,10 +118,10 @@ if exist(fn_description,'file')
     end
 else
     for i = 1:length(ps.tag)
-        if isfield(ps.param,[ps.tag{i},'_description'])
-            ps.description{i,1}=ps.param.([ps.tag{i},'_description']);
+        if isfield(ps.param,['description_',ps.tag{i}])
+            ps.description{i,1}=ps.param.(['description_',ps.tag{i}]);
         else
-            ps.description{i,1}=['- ',ps.tag{i}];
+            ps.description{i,1}=['(',ps.tag{i},')'];
         end
     end
 end
@@ -132,7 +132,7 @@ for i = 1:length(ps.tag)
 end
 if exist(fn_control,'file');
     fi = fopen(fn_control);
-    pr = textscan(fi,'%s%s','delimiter',';');
+    pr = textscan(fi,'%s%s','delimiter','\t');
     fclose(fi);
     for i = 1:length(pr{1})
         ixs=find(strcmp(pr{1}{i},ps.tag));
@@ -146,7 +146,7 @@ if exist(fn_control,'file');
 else
     for i = 1:length(ps.tag)
         aa = fieldnames(ps.param);
-        se = find(strncmp([ps.tag{i},'_cas_control'],aa,12+length(ps.tag{i})));
+        se = find(strncmp(['cas_control_',ps.tag{i}],aa,12+length(ps.tag{i})));
         if not(isempty(se))
             for j = 1:length(se)
                 ps.cas_control{i}{j}=ps.param.(aa{se(j)});

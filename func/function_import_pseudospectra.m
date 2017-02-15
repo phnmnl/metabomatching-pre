@@ -78,7 +78,6 @@ if exist(ps.param.dir_source,'dir')
                 ps.pm{jr,1}='negative';
             end
         end
-    ps.tagPseudo=ps.tag;
     else
         error('metabomatching:noPS','No pseudospectrum files found (*.pseudospectrum.tsv)');
     end

@@ -1,9 +1,9 @@
 clear all;
 funcdir=getenv('DR_METABOMATCHING');
 if ~isempty(funcdir)
-addpath(fullfile(funcdir,'func'));
+    addpath(fullfile(funcdir,'func'));
 else
-addpath('func');
+    addpath('func');
 end
 dirs = dir;
 dirs_source = {dirs(:).name};
@@ -25,7 +25,7 @@ for i = 1:length(dirs_source)
     fprintf(' done\n--- writing scores ----------------');
     function_write_scores(ps);
     save(fullfile(dir_source,'ps.mat'),'ps');
-    fprintf(' done\n--- writing svg -------------------');    
+    fprintf(' done\n--- writing svg -------------------');
     vis_metabomatching(dir_source);
     fprintf(' done\n----------------------------------- ---+');
     fprintf('\n\n');

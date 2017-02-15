@@ -6,7 +6,7 @@ scoring	chisq
 decorr_lambda	1.0000
 n_show	8
 p_significant	1E-6
-x_description	rs72 in AGXT2
-x_cas_control_1	79-31-2
-x_cas_control_2	64-17-5
-y_cas_control_1	79-31-2
+description_x	rs72 in AGXT2
+cas_control_x_1	79-31-2
+cas_control_x_2	64-17-5
+cas_control_y_1	79-31-2

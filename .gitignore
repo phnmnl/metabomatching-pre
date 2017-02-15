@@ -1,4 +1,8 @@
-test/image.svg
-test/scores.tsv
-working_dir
+*sco*
+wd
 *~
+*.gz
+*.aux
+*.log
+*.toc
+*.out
